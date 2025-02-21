@@ -19,7 +19,7 @@ const validateFormData = (data) => {
   return errors;
 };
 
-const emailRegex = /^[c]\d{6}@mylambton\.ca$/;
+const emailRegex = /^c\d{7}@mylambton\.ca$/;
 const phoneNumberRegex = /^\d{3}-\d{3}-\d{4}$/;
 
 export default function Register() {
@@ -35,12 +35,6 @@ export default function Register() {
 
   const [error, setError] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const handleRegister = () => {
     const validationErrors = validateFormData(formData);
@@ -91,7 +85,7 @@ export default function Register() {
           <h2 className="text-primary fw-bold mb-4">Lambton Marketplace</h2>
 
 
-          <h2 className="text-center mb-3">Register</h2>
+          <h2 className="text-center mb-3">Registration</h2>
 
           <Form
             className="p-4"
@@ -110,7 +104,7 @@ export default function Register() {
                 { required: true, message: "Email is required!" },
                 {
                   pattern: emailRegex,
-                  message: "Email must be in the format c902999@mylambton.ca",
+                  message: "User Name must be in the college id format",
                 },
               ]}
               help={error.email}
