@@ -86,7 +86,7 @@ export default function Register() {
           />
         </Col>
 
-        <Col xs={12} md={3} className="d-flex-column justify-content-center align-items-center p-4">
+        <Col xs={12} md={3} className="d-flex flex-column justify-content-top align-items-top p-4" style={{ overflowY: "auto", maxHeight: "100vh" }}>
 
           <h2 className="text-primary fw-bold mb-4">Lambton Marketplace</h2>
 
