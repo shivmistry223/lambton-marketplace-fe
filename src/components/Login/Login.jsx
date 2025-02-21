@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import bannerImage from "../../assets/banner.webp"; // Import the image
+import bannerImage from "../../assets/banner.webp"; 
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -9,10 +8,10 @@ export default function Login() {
   const [error, setError] = useState("");
 
   const handleLogin = async () => {
-    setError(""); // Reset previous error messages
+    setError(""); 
 
     try {
-      const response = await fetch("http://localhost:5000/api/login", { // Replace with your backend API
+      const response = await fetch("http://localhost:5000/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -22,8 +21,8 @@ export default function Login() {
 
       if (response.ok) {
         alert("Login successful!");
-        localStorage.setItem("token", data.token); // Store authentication token
-        window.location.href = "/dashboard"; // Redirect to dashboard
+        localStorage.setItem("token", data.token); 
+        window.location.href = "/dashboard"; 
       } else {
         setError(data.message || "Invalid credentials");
       }
@@ -35,16 +34,15 @@ export default function Login() {
   return (
     <div className="container-fluid vh-100 d-flex align-items-center justify-content-center">
       <div className="row w-100">
-        {/* Left Side - Background Image */}
+       
         <div className="col-lg-6 d-none d-lg-block p-0">
           <img
-            src={bannerImage} // Use the imported image here
+            src={bannerImage} 
             alt="Lambton College"
             className="img-fluid w-100 h-100 object-fit-cover"
           />
         </div>
 
-        {/* Right Side - Login Form */}
         <div className="col-lg-6 d-flex flex-column align-items-center justify-content-center p-5">
           <h1 className="text-primary fw-bold mb-4">Lambton Marketplace</h1>
           <div className="card shadow p-4 w-100" style={{ maxWidth: "400px" }}>
