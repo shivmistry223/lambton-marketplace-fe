@@ -32,7 +32,7 @@ export default function ResetPassword() {
         }
         setLoading(false);
     };
-
+    <img src="/src/assets/LambtonCollege_Logo.png" alt="Lambton Logo" style={{ height: "40px" }} />
     return (
         <Container fluid>
             <Row className="vh-100">
@@ -43,9 +43,10 @@ export default function ResetPassword() {
                         className="img-fluid h-100 w-100 object-fit-cover"
                     />
                 </Col>
+                <img src="/src/assets/LambtonCollege_Logo.png" alt="Lambton Logo" style={{ height: "40px" }} />
 
                 <Col xs={12} md={3} className="d-flex flex-column justify-content-center align-items-top p-4">
-                    <h2 className="text-center mb-4">Reset Password</h2>
+                    
 
                     <Form layout="vertical" onFinish={handleSubmit}>
                         <Form.Item
