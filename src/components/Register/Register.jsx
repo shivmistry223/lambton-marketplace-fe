@@ -84,12 +84,13 @@ export default function Register() {
 
           
 <br></br>
-        <img src="/src/assets/LambtonCollege_Logo.png" alt="Lambton Logo" style={{ height: "50px" }} />
-        <br></br>
-        <br></br>
+<img 
+  src="/src/assets/LambtonCollege_Logo.png" 
+  alt="Lambton Logo" 
+  style={{ height: "50px", display: "block", margin: "0 auto" }} 
+/>
         
-          <h3 className="text-center mb-3">Register your account</h3>
-
+         
           <Form
             className="p-4"
             layout="vertical"

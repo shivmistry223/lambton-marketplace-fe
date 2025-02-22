@@ -45,7 +45,11 @@ export default function ForgotPassword() {
                 </Col>
 
                 <Col xs={12} md={3} className="d-flex flex-column justify-content-center align-items-top p-4">
-                <img src="/src/assets/LambtonCollege_Logo.png" alt="Lambton Logo" style={{ height: "50px" }} />
+                <img 
+  src="/src/assets/LambtonCollege_Logo.png" 
+  alt="Lambton Logo" 
+  style={{ height: "50px", display: "block", margin: "0 auto" }} 
+/>
                 <br></br>
                 <br></br>
                    

@@ -43,12 +43,20 @@ export default function ResetPassword() {
                         className="img-fluid h-100 w-100 object-fit-cover"
                     />
                 </Col>
-                <img src="/src/assets/LambtonCollege_Logo.png" alt="Lambton Logo" style={{ height: "40px" }} />
+               
 
                 <Col xs={12} md={3} className="d-flex flex-column justify-content-center align-items-top p-4">
                     
 
                     <Form layout="vertical" onFinish={handleSubmit}>
+                    <img 
+  src="/src/assets/LambtonCollege_Logo.png" 
+  alt="Lambton Logo" 
+  style={{ height: "50px", display: "block", margin: "0 auto" }} 
+/>
+                    <br></br>
+                    <br></br>
+                    
                         <Form.Item
                             label="New Password"
                             name="password"
