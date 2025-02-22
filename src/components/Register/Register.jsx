@@ -82,10 +82,13 @@ export default function Register() {
 
         <Col xs={12} md={3} className="d-flex flex-column justify-content-top align-items-top p-4" style={{ overflowY: "auto", maxHeight: "100vh" }}>
 
-          <h2 className="text-primary fw-bold mb-4">Lambton Marketplace</h2>
-
-
-          <h2 className="text-center mb-3">Registration</h2>
+          
+<br></br>
+        <img src="/src/assets/LambtonCollege_Logo.png" alt="Lambton Logo" style={{ height: "50px" }} />
+        <br></br>
+        <br></br>
+        
+          <h3 className="text-center mb-3">Register your account</h3>
 
           <Form
             className="p-4"
