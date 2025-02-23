@@ -10,7 +10,7 @@ const validateFormData = (data) => {
   if (!data.userName) errors.userName = "Username (Email) is required!";
   if (!data.courseCode) errors.courseCode = "Course Code is required!";
   if (!data.termNo) errors.termNo = "Term Number is required!";
-  if (!data.email) errors.email = "Email is required!";
+  if (!data.fullName) errors.fullName = "Full Name is required!";
   if (!data.phoneNumber) errors.phoneNumber = "Phone Number is required!";
   if (!data.password) errors.password = "Password is required!";
   if (data.password !== data.confirmPassword) errors.confirmPassword = "Passwords do not match!";
@@ -20,20 +20,21 @@ const validateFormData = (data) => {
 };
 
 const emailRegex = /^c\d{7}@mylambton\.ca$/;
-const phoneNumberRegex = /^\d{3}-\d{3}-\d{4}$/;
 
 export default function Register() {
   const [formData, setFormData] = useState({
     userName: "",
     courseCode: "",
     termNo: "",
-    email: "",
     phoneNumber: "",
+    fullName: "",
     password: "",
     confirmPassword: "",
   });
 
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
 
   const handleRegister = () => {
@@ -48,6 +49,8 @@ export default function Register() {
   };
 
   const registerUser = async () => {
+    setError("");
+    setLoading(true);
     try {
       const response = await fetch("http://localhost:5000/register", {
         method: "POST",
@@ -59,13 +62,12 @@ export default function Register() {
 
       if (response.ok) {
         alert("Registration successful!");
-
+        window.location.href = "/login";
       } else {
-        alert("Registration failed. Please try again.");
+        setError(data.message || "Registration failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error registering:", error);
-      alert("Something went wrong. Please try again later.");
+      setError("Something went wrong. Please try again.");
     }
   };
 
@@ -86,6 +88,8 @@ export default function Register() {
 
 
           <h2 className="text-center mb-3">Registration</h2>
+
+          {error && <Alert message={error} type="error" showIcon className="mb-3" />}
 
           <Form
             className="p-4"
@@ -153,10 +157,6 @@ export default function Register() {
               name="phoneNumber"
               rules={[
                 { required: true, message: "Phone number is required!" },
-                {
-                  pattern: phoneNumberRegex,
-                  message: "Phone number must be in the format 123-456-7890",
-                },
               ]}
               help={error.phoneNumber}
               validateStatus={error.phoneNumber ? "error" : ""}

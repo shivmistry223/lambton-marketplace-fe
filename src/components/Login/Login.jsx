@@ -9,6 +9,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+
   const handleLogin = async () => {
     setError("");
     setLoading(true);
@@ -22,7 +23,6 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Login successful!");
         localStorage.setItem("token", data.token);
         window.location.href = "/dashboard";
       } else {

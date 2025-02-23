@@ -70,8 +70,8 @@ export default function ForgotPassword() {
                     </Form>
 
                     <p className="text-center mt-3">
-                        Return to Reset password?{" "}
-                        <Link to="/reset-password" className="text-primary fw-bold">
+                        Return to Login?{" "}
+                        <Link to="/login" className="text-primary fw-bold">
                             Click Here
                         </Link>
                     </p>
