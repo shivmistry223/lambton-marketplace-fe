@@ -91,6 +91,15 @@ export default function Register() {
 
           {error && <Alert message={error} type="error" showIcon className="mb-3" />}
 
+
+          <br></br>
+          <img
+            src="/src/assets/LambtonCollege_Logo.png"
+            alt="Lambton Logo"
+            style={{ height: "50px", display: "block", margin: "0 auto" }}
+          />
+
+
           <Form
             className="p-4"
             layout="vertical"
