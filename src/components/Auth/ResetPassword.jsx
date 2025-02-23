@@ -4,9 +4,11 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
 
 export default function ResetPassword() {
-    const { token } = useParams(); 
+    const { token } = useParams();
     const [message, setMessage] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [form] = Form.useForm();
+
 
     const handleSubmit = async (values) => {
         setLoading(true);
@@ -23,16 +25,31 @@ export default function ResetPassword() {
             const data = await response.json();
 
             if (response.ok) {
-                setMessage({ type: "success", text: "Password reset successful! You can now login." });
+                setMessage({
+                    type: "success",
+                    text: "Password reset successful! You can now login.",
+                });
+                form.resetFields();
+
             } else {
-                setMessage({ type: "error", text: data.error || "Failed to reset password." });
+                setMessage({
+                    type: "error",
+                    text: data.error || "Failed to reset password.",
+                });
             }
         } catch (error) {
-            setMessage({ type: "error", text: "Something went wrong. Try again later." });
+            setMessage({
+                type: "error",
+                text: "Something went wrong. Try again later.",
+            });
         }
         setLoading(false);
     };
-    <img src="/src/assets/LambtonCollege_Logo.png" alt="Lambton Logo" style={{ height: "40px" }} />
+    <img
+        src="/src/assets/LambtonCollege_Logo.png"
+        alt="Lambton Logo"
+        style={{ height: "40px" }}
+    />;
     return (
         <Container fluid>
             <Row className="vh-100">
@@ -43,20 +60,32 @@ export default function ResetPassword() {
                         className="img-fluid h-100 w-100 object-fit-cover"
                     />
                 </Col>
-               
 
-                <Col xs={12} md={3} className="d-flex flex-column justify-content-center align-items-top p-4">
-                    
-
-                    <Form layout="vertical" onFinish={handleSubmit}>
-                    <img 
-  src="/src/assets/LambtonCollege_Logo.png" 
-  alt="Lambton Logo" 
-  style={{ height: "50px", display: "block", margin: "0 auto" }} 
-/>
-                    <br></br>
-                    <br></br>
-                    
+                <Col
+                    xs={12}
+                    md={3}
+                    className="d-flex flex-column justify-content-top align-items-top p-4"
+                >
+                    <img
+                        src="/src/assets/LambtonCollege_Logo.png"
+                        alt="Lambton Logo"
+                        style={{ height: "50px", width: "50%" }}
+                    />
+                    <Form
+                        layout="vertical"
+                        onFinish={handleSubmit}
+                        style={{ margin: "auto 0px" }}
+                        form={form}
+                    >
+                        <p className="text-center fw-bold mb-4 fs-3">Reset Password</p>
+                        {message && (
+                            <Alert
+                                className="mt-3"
+                                message={message.text}
+                                type={message.type}
+                                showIcon
+                            />
+                        )}
                         <Form.Item
                             label="New Password"
                             name="password"
@@ -92,19 +121,13 @@ export default function ResetPassword() {
                         <Button type="primary" htmlType="submit" block loading={loading}>
                             Reset Password
                         </Button>
+                        <p className="text-center mt-3">
+                            Return to Login Page?{" "}
+                            <Link to="/login" className="text-primary fw-bold">
+                                Click Here
+                            </Link>
+                        </p>
                     </Form>
-
-                    <p className="text-center mt-3">
-                        Return to Login Page?{" "}
-                        <Link to="/login" className="text-primary fw-bold">
-                            Click Here
-                        </Link>
-                    </p>
-
-
-                    {message && (
-                        <Alert className="mt-3" message={message.text} type={message.type} showIcon />
-                    )}
                 </Col>
             </Row>
         </Container>

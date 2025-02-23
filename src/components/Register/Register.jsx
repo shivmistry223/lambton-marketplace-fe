@@ -84,21 +84,17 @@ export default function Register() {
 
         <Col xs={12} md={3} className="d-flex flex-column justify-content-top align-items-top p-4" style={{ overflowY: "auto", maxHeight: "100vh" }}>
 
-          <h2 className="text-primary fw-bold mb-4">Lambton Marketplace</h2>
 
-
-          <h2 className="text-center mb-3">Registration</h2>
-
-          {error && <Alert message={error} type="error" showIcon className="mb-3" />}
-
-
-          <br></br>
           <img
             src="/src/assets/LambtonCollege_Logo.png"
             alt="Lambton Logo"
-            style={{ height: "50px", display: "block", margin: "0 auto" }}
+            style={{ height: "50px", width: "50%", margin: "10px 0px" }}
           />
 
+          <p className="text-center fw-bold mt-4">
+            Register Yourself To Our Marketplace
+          </p>
+          {error && <Alert message={error} type="error" showIcon className="mb-3" />}
 
           <Form
             className="p-4"
@@ -111,7 +107,7 @@ export default function Register() {
           >
 
             <Form.Item
-              label="Email"
+              label="College ID"
               name="userName"
               rules={[
                 { required: true, message: "Email is required!" },
@@ -123,7 +119,7 @@ export default function Register() {
               help={error.email}
               validateStatus={error.email ? "error" : ""}
             >
-              <Input placeholder="Email" />
+              <Input placeholder="College ID" />
             </Form.Item>
 
             <Form.Item
@@ -208,7 +204,7 @@ export default function Register() {
             )}
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" block>
+              <Button type="primary" htmlType="submit" block loading={loading}>
                 Register
               </Button>
             </Form.Item>
