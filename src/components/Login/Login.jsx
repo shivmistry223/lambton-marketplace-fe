@@ -4,7 +4,7 @@ import { Form, Input, Button, Alert } from "antd";
 import { Container, Row, Col } from "react-bootstrap";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,7 +16,7 @@ export default function Login() {
       const response = await fetch("http://localhost:5000/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userName: email, password }),
+        body: JSON.stringify({ userName: username, password }),
       });
 
       const data = await response.json();
@@ -47,16 +47,20 @@ export default function Login() {
         </Col>
 
         <Col xs={12} md={3} className="d-flex flex-column justify-content-center align-items-center p-4">
-          <h2 className="text-primary fw-bold mb-4">Lambton Marketplace</h2>
-
+          
+        <img src="/src/assets/LambtonCollege_Logo.png" alt="Lambton Logo" style={{ height: "40px" }} />
+        
           <div className="p-4 w-100" style={{ maxWidth: "400px" }}>
-            <h2 className="text-center mb-3">Login</h2>
+          
+        
+            
+            <p className="text-center mb-4">Hi, Welcome to Lambton in Mississauga</p>
 
             {error && <Alert message={error} type="error" showIcon className="mb-3" />}
 
             <Form layout="vertical" onFinish={handleLogin}>
-              <Form.Item label="Email" name="email" rules={[{ required: true, type: "email", message: "Please enter a valid email!" }]}>
-                <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Form.Item label="Username" name="username" rules={[{ required: true, message: "Please enter your username!" }]}>
+                <Input value={username} onChange={(e) => setUsername(e.target.value)} />
               </Form.Item>
 
               <Form.Item label="Password" name="password" rules={[{ required: true, message: "Please enter your password!" }]}>
