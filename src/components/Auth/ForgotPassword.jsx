@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Container, Row, Col, } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import { Form, Input, Button, Alert } from "antd";
 import { Link } from "react-router-dom";
-
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [form] = Form.useForm();
+
 
     const handleSubmit = async (values) => {
         setLoading(true);
@@ -23,12 +24,23 @@ export default function ForgotPassword() {
             const data = await response.json();
 
             if (response.ok) {
-                setMessage({ type: "success", text: "Reset link sent! Check your email." });
+                setMessage({
+                    type: "success",
+                    text: "Reset link sent! Check your email.",
+                });
+                form.resetFields();
+
             } else {
-                setMessage({ type: "error", text: data.error || "Failed to send reset link." });
+                setMessage({
+                    type: "error",
+                    text: data.error || "Failed to send reset link.",
+                });
             }
         } catch (error) {
-            setMessage({ type: "error", text: "Something went wrong. Try again later." });
+            setMessage({
+                type: "error",
+                text: "Something went wrong. Try again later.",
+            });
         }
         setLoading(false);
     };
@@ -44,17 +56,31 @@ export default function ForgotPassword() {
                     />
                 </Col>
 
-                <Col xs={12} md={3} className="d-flex flex-column justify-content-center align-items-top p-4">
-                <img 
-  src="/src/assets/LambtonCollege_Logo.png" 
-  alt="Lambton Logo" 
-  style={{ height: "50px", display: "block", margin: "0 auto" }} 
-/>
-                <br></br>
-                <br></br>
-                   
+                <Col
+                    xs={12}
+                    md={3}
+                    className="d-flex flex-column justify-content-top align-items-top p-4"
+                >
+                    <img
+                        src="/src/assets/LambtonCollege_Logo.png"
+                        alt="Lambton Logo"
+                        style={{ height: "50px", width: "50%" }}
+                    />
+                    <br></br>
+                    <br></br>
 
-                    <Form layout="vertical" onFinish={handleSubmit}>
+                    <Form layout="vertical" onFinish={handleSubmit} style={{ margin: "auto 0px" }} form={form}>
+                        <p className="text-center fw-bold mb-4 fs-3">
+                            Forgot Password
+                        </p>
+                        {message && (
+                            <Alert
+                                className="mt-3"
+                                message={message.text}
+                                type={message.type}
+                                showIcon
+                            />
+                        )}
                         <Form.Item
                             label="Enter your College ID"
                             name="userName"
@@ -74,20 +100,19 @@ export default function ForgotPassword() {
                         <Button type="primary" htmlType="submit" block loading={loading}>
                             Send Reset Link
                         </Button>
+                        <p className="text-center mt-3">
+                            Return to Login?{" "}
+                            <Link to="/login" className="text-primary fw-bold">
+                                Click Here
+                            </Link>
+                        </p>
                     </Form>
 
-                    <p className="text-center mt-3">
-                        Return to Reset password?{" "}
-                        <Link to="/reset-password" className="text-primary fw-bold">
-                            Click Here
-                        </Link>
-                    </p>
 
-                    {message && (
-                        <Alert className="mt-3" message={message.text} type={message.type} showIcon />
-                    )}
+
+
                 </Col>
             </Row>
-        </Container >
+        </Container>
     );
 }

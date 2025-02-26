@@ -10,7 +10,7 @@ const validateFormData = (data) => {
   if (!data.userName) errors.userName = "Username (Email) is required!";
   if (!data.courseCode) errors.courseCode = "Course Code is required!";
   if (!data.termNo) errors.termNo = "Term Number is required!";
-  if (!data.email) errors.email = "Email is required!";
+  if (!data.fullName) errors.fullName = "Full Name is required!";
   if (!data.phoneNumber) errors.phoneNumber = "Phone Number is required!";
   if (!data.password) errors.password = "Password is required!";
   if (data.password !== data.confirmPassword) errors.confirmPassword = "Passwords do not match!";
@@ -20,20 +20,21 @@ const validateFormData = (data) => {
 };
 
 const emailRegex = /^c\d{7}@mylambton\.ca$/;
-const phoneNumberRegex = /^\d{3}-\d{3}-\d{4}$/;
 
 export default function Register() {
   const [formData, setFormData] = useState({
     userName: "",
     courseCode: "",
     termNo: "",
-    email: "",
     phoneNumber: "",
+    fullName: "",
     password: "",
     confirmPassword: "",
   });
 
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
 
   const handleRegister = () => {
@@ -48,6 +49,8 @@ export default function Register() {
   };
 
   const registerUser = async () => {
+    setError("");
+    setLoading(true);
     try {
       const response = await fetch("http://localhost:5000/register", {
         method: "POST",
@@ -59,13 +62,12 @@ export default function Register() {
 
       if (response.ok) {
         alert("Registration successful!");
-
+        window.location.href = "/login";
       } else {
-        alert("Registration failed. Please try again.");
+        setError(data.message || "Registration failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error registering:", error);
-      alert("Something went wrong. Please try again later.");
+      setError("Something went wrong. Please try again.");
     }
   };
 
@@ -82,15 +84,18 @@ export default function Register() {
 
         <Col xs={12} md={3} className="d-flex flex-column justify-content-top align-items-top p-4" style={{ overflowY: "auto", maxHeight: "100vh" }}>
 
-          
-<br></br>
-<img 
-  src="/src/assets/LambtonCollege_Logo.png" 
-  alt="Lambton Logo" 
-  style={{ height: "50px", display: "block", margin: "0 auto" }} 
-/>
-        
-         
+
+          <img
+            src="/src/assets/LambtonCollege_Logo.png"
+            alt="Lambton Logo"
+            style={{ height: "50px", width: "50%", margin: "10px 0px" }}
+          />
+
+          <p className="text-center fw-bold mt-4">
+            Register Yourself To Our Marketplace
+          </p>
+          {error && <Alert message={error} type="error" showIcon className="mb-3" />}
+
           <Form
             className="p-4"
             layout="vertical"
@@ -102,7 +107,7 @@ export default function Register() {
           >
 
             <Form.Item
-              label="Email"
+              label="College ID"
               name="userName"
               rules={[
                 { required: true, message: "Email is required!" },
@@ -114,7 +119,7 @@ export default function Register() {
               help={error.email}
               validateStatus={error.email ? "error" : ""}
             >
-              <Input placeholder="Email" />
+              <Input placeholder="College ID" />
             </Form.Item>
 
             <Form.Item
@@ -157,10 +162,6 @@ export default function Register() {
               name="phoneNumber"
               rules={[
                 { required: true, message: "Phone number is required!" },
-                {
-                  pattern: phoneNumberRegex,
-                  message: "Phone number must be in the format 123-456-7890",
-                },
               ]}
               help={error.phoneNumber}
               validateStatus={error.phoneNumber ? "error" : ""}
@@ -203,7 +204,7 @@ export default function Register() {
             )}
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" block>
+              <Button type="primary" htmlType="submit" block loading={loading}>
                 Register
               </Button>
             </Form.Item>
