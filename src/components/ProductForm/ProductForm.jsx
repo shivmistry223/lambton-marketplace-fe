@@ -1,26 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Input, Select, Layout, Upload, message, Typography, Alert, Modal } from "antd";
+import { Form, Button, Input, Select, Layout, Upload, message, Typography, Alert } from "antd";
 import { Container, Row, Col } from "react-bootstrap";
 import CustomHeader from "../Header/CustomHeader";
 import { handleLogout } from "../../utils/helper";
-import { UploadOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import { PRODUCT, PRODUCT_TYPES } from "../../utils/constant";
+import { UploadOutlined } from "@ant-design/icons";
+import { PRODUCT_TYPES } from "../../utils/constant";
+import { useParams } from "react-router-dom";
 
 const { Option } = Select;
 const { Title } = Typography;
 
 const ProductForm = () => {
     const { id } = useParams();
-    const navigate = useNavigate();
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const [messageData, setMessageData] = useState(null);
     const [file, setFile] = useState(null);
     const [existingImage, setExistingImage] = useState("");
-    const [modalVisible, setModalVisible] = useState(false);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [modalMessage, setModalMessage] = useState("");
 
     useEffect(() => {
         if (id) {
@@ -30,7 +26,7 @@ const ProductForm = () => {
 
     const fetchProductData = async (productId) => {
         try {
-            const response = await fetch(`${PRODUCT}/${productId}`);
+            const response = await fetch(`http://localhost:5000/product/${productId}`);
             const data = await response.json();
 
             if (response.ok) {
@@ -65,7 +61,7 @@ const ProductForm = () => {
             }
 
             const method = id ? "PATCH" : "POST";
-            const url = id ? `${PRODUCT}/${id}` : `${PRODUCT}`;
+            const url = id ? `http://localhost:5000/product/${id}` : "http://localhost:5000/product";
 
             const response = await fetch(url, {
                 method: method,
@@ -78,58 +74,28 @@ const ProductForm = () => {
             setLoading(false);
 
             if (response.ok) {
-                setModalMessage(id ? "Product updated successfully!" : "Product added successfully!");
-                setModalVisible(true);
+                setMessageData({
+                    type: "success",
+                    text: id ? "Product updated successfully!" : "Product added successfully!",
+                });
+                form.resetFields();
             } else {
-                setMessageData({ type: "error", text: "Something went wrong." });
+                setMessageData({
+                    type: "error",
+                    text: "Something went wrong.",
+                });
             }
         } catch (error) {
             setLoading(false);
-            setMessageData({ type: "error", text: "Something went wrong." });
+            setMessageData({
+                type: "error",
+                text: "Something went wrong.",
+            });
         }
     };
 
     const handleFileChange = (e) => {
         setFile(e.file);
-    };
-
-
-    const handleModalOk = () => {
-        setModalVisible(false);
-        navigate("/dashboard");
-    };
-
-    const showModal = () => {
-        setIsModalVisible(true);
-    };
-
-    const handleCancel = () => {
-        setIsModalVisible(false);
-    };
-
-    const handleDelete = async () => {
-        setLoading(true);
-        try {
-            const token = localStorage.getItem("token");
-            const response = await fetch(`${PRODUCT}/${id}`, {
-                method: "DELETE",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (response.ok) {
-                setIsModalVisible(false);
-                setModalMessage("Product deleted successfully!");
-                setModalVisible(true);
-            } else {
-                message.error("Failed to delete product.");
-            }
-        } catch (error) {
-            message.error("Something went wrong.");
-        } finally {
-            setLoading(false);
-        }
     };
 
     return (
@@ -139,7 +105,9 @@ const ProductForm = () => {
                 <Row className="justify-content-center">
                     <Col md={6}>
                         <div style={{ boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", padding: "20px", borderRadius: "8px", background: "white" }}>
-                            <Title level={2} className="text-center">{id ? "Edit Product" : "Add New Product"}</Title>
+                            <Title level={2} className="text-center">
+                                {id ? "Update Product" : "Add Product"}
+                            </Title>
                             {messageData && (
                                 <Alert
                                     className="mt-3"
@@ -174,7 +142,11 @@ const ProductForm = () => {
                                 <Form.Item label="Upload Image" name="productImage">
                                     {existingImage && !file && (
                                         <div>
-                                            <img src={`http://localhost:5000${existingImage}`} alt="Product" style={{ width: "100px", marginBottom: "10px" }} />
+                                            <img
+                                                src={`http://localhost:5000${existingImage}`}
+                                                alt="Product"
+                                                style={{ width: "100px", marginBottom: "10px" }}
+                                            />
                                         </div>
                                     )}
                                     <Upload beforeUpload={() => false} listType="picture" onChange={handleFileChange}>
@@ -188,34 +160,10 @@ const ProductForm = () => {
                                     </Button>
                                 </Form.Item>
                             </Form>
-
-                            {id && (
-                                <Button type="danger" onClick={showModal} block>
-                                    Delete Product
-                                </Button>
-                            )}
                         </div>
                     </Col>
                 </Row>
             </Container>
-
-            <Modal open={modalVisible} onOk={handleModalOk} onCancel={handleModalOk} centered>
-                <p>{modalMessage}</p>
-            </Modal>
-            <Modal
-                title="Confirm Deletion"
-                open={isModalVisible}
-                onOk={handleDelete}
-                onCancel={handleCancel}
-                okText="Yes, Delete"
-                okType="danger"
-                cancelText="Cancel"
-                confirmLoading={loading}
-                centered
-            >
-                <p><ExclamationCircleOutlined style={{ color: "red", marginRight: "10px" }} />Are you sure you want to delete this product?</p>
-                <p>This action cannot be undone.</p>
-            </Modal>
         </Layout>
     );
 };

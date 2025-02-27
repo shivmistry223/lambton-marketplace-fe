@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Form, Input, Button, Alert } from "antd";
 import { Container, Row, Col } from "react-bootstrap";
-import { LOGIN } from "../../utils/constant";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -16,7 +15,7 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      const response = await fetch(LOGIN, {
+      const response = await fetch("http://localhost:5000/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userName: username, password }),
