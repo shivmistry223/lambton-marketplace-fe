@@ -4,3 +4,10 @@ export const PRODUCT_TYPES = [
   { label: "Electronics", value: "electronic" },
   { label: "Sports", value: "sport" },
 ];
+
+export const PRODUCT = "http://localhost:5000/product";
+export const LOGIN = "http://localhost:5000/login";
+export const REGISTER = "http://localhost:5000/register";
+export const RESET_PASSWORD = "http://localhost:5000/reset-password";
+export const FORGOT_PASSWORD = "http://localhost:5000/forgot-password";
+export const LOGOUT = "http://localhost:5000/logout";
