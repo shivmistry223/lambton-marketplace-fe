@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Form, Input, Button, Alert } from "antd";
 import { Link } from "react-router-dom";
-import { FORGOT_PASSWORD } from "../../utils/constant";
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState("");
@@ -14,7 +13,7 @@ export default function ForgotPassword() {
     const handleSubmit = async (values) => {
         setLoading(true);
         try {
-            const response = await fetch(FORGOT_PASSWORD, {
+            const response = await fetch("http://localhost:5000/forgot-password", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

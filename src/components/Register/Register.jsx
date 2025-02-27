@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Form, Input, Button, Select, Alert } from "antd";
 import { Container, Row, Col } from "react-bootstrap";
-import { REGISTER } from "../../utils/constant";
 
 
 const validateFormData = (data) => {
@@ -53,7 +52,7 @@ export default function Register() {
     setError("");
     setLoading(true);
     try {
-      const response = await fetch(REGISTER, {
+      const response = await fetch("http://localhost:5000/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

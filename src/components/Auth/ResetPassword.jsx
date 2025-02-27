@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Form, Input, Button, Alert } from "antd";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
-import { RESET_PASSWORD } from "../../utils/constant";
 
 export default function ResetPassword() {
     const { token } = useParams();
@@ -14,7 +13,7 @@ export default function ResetPassword() {
     const handleSubmit = async (values) => {
         setLoading(true);
         try {
-            const response = await fetch(RESET_PASSWORD, {
+            const response = await fetch("http://localhost:5000/reset-password", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
