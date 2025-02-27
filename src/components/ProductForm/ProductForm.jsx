@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Form, Button, Input, Select, Layout, Upload, message, Typography, Alert, Modal } from "antd";
 import { Container, Row, Col } from "react-bootstrap";
 import CustomHeader from "../Header/CustomHeader";
-import { handleLogout } from "../../utils/helper";
 import { UploadOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { PRODUCT, PRODUCT_TYPES } from "../../utils/constant";
 
@@ -134,7 +133,7 @@ const ProductForm = () => {
 
     return (
         <Layout style={{ minHeight: "100vh", minWidth: "100vw" }}>
-            <CustomHeader handleLogout={handleLogout} />
+            <CustomHeader />
             <Container className="mt-4">
                 <Row className="justify-content-center">
                     <Col md={6}>

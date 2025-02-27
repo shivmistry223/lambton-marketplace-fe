@@ -14,7 +14,7 @@ const Dashboard = () => {
 
     return (
         <Layout style={{ minHeight: "100vh", minWidth: "100vw" }}>
-            <CustomHeader handleLogout={handleLogout} />
+            <CustomHeader />
             <Container className="mt-4">
 
             </Container>
