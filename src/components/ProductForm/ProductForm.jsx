@@ -1,64 +1,96 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Button, Input, Select, Layout, Upload, message, Typography, Alert } from "antd";
 import { Container, Row, Col } from "react-bootstrap";
 import CustomHeader from "../Header/CustomHeader";
 import { handleLogout } from "../../utils/helper";
 import { UploadOutlined } from "@ant-design/icons";
 import { PRODUCT_TYPES } from "../../utils/constant";
-import { request } from '../../utils/request'
+import { useParams } from "react-router-dom";
+
 const { Option } = Select;
 const { Title } = Typography;
 
-const ProductForm = ({ onSubmit }) => {
+const ProductForm = () => {
+    const { id } = useParams();
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState(null);
+    const [messageData, setMessageData] = useState(null);
     const [file, setFile] = useState(null);
+    const [existingImage, setExistingImage] = useState("");
+
+    useEffect(() => {
+        if (id) {
+            fetchProductData(id);
+        }
+    }, [id]);
+
+    const fetchProductData = async (productId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/product/${productId}`);
+            const data = await response.json();
+
+            if (response.ok) {
+                form.setFieldsValue({
+                    productName: data.productName,
+                    productDescription: data.productDescription,
+                    productCategory: data.productCatagory,
+                    productPrice: data.productPrice,
+                });
+                setExistingImage(data.productimageUrl);
+            } else {
+                setMessageData({ type: "error", text: "Failed to fetch product details." });
+            }
+        } catch (error) {
+            setMessageData({ type: "error", text: "Something went wrong while fetching data." });
+        }
+    };
 
     const handleFinish = async (values) => {
         try {
             setLoading(true);
-
-            const token = localStorage.getItem("token")
+            const token = localStorage.getItem("token");
 
             const formData = new FormData();
-            formData.append("productName", values["productName"]);
-            formData.append("productDescription", values["productDescription"]);
-            formData.append("productCatagory", values["productCategory"]);
-            formData.append("productPrice", values["productPrice"]);
-            formData.append("productImage", file);
+            formData.append("productName", values.productName);
+            formData.append("productDescription", values.productDescription);
+            formData.append("productCatagory", values.productCategory);
+            formData.append("productPrice", values.productPrice);
 
+            if (file) {
+                formData.append("productImage", file);
+            }
 
-            const response = await fetch("http://localhost:5000/product", {
-                method: "post",
+            const method = id ? "PATCH" : "POST";
+            const url = id ? `http://localhost:5000/product/${id}` : "http://localhost:5000/product";
+
+            const response = await fetch(url, {
+                method: method,
                 body: formData,
-                headers: new Headers({
-                    "Access-Control-Allow-Origin": "http://localhost:5173",
+                headers: {
                     Authorization: `Bearer ${token}`,
-
-                }),
-            })
+                },
+            });
 
             setLoading(false);
 
             if (response.ok) {
-                setMessage({
+                setMessageData({
                     type: "success",
-                    text: "Product added successfully!",
+                    text: id ? "Product updated successfully!" : "Product added successfully!",
                 });
                 form.resetFields();
             } else {
-                setError(data.message || "Something went wrong");
+                setMessageData({
+                    type: "error",
+                    text: "Something went wrong.",
+                });
             }
-
-        } catch (e) {
-            setLoading(false)
-            setMessage({
-                type: "error",
-                text: e.error || "Something went wrong.",
-            });
-        } finally {
+        } catch (error) {
             setLoading(false);
+            setMessageData({
+                type: "error",
+                text: "Something went wrong.",
+            });
         }
     };
 
@@ -73,12 +105,14 @@ const ProductForm = ({ onSubmit }) => {
                 <Row className="justify-content-center">
                     <Col md={6}>
                         <div style={{ boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", padding: "20px", borderRadius: "8px", background: "white" }}>
-                            <Title level={2} className="text-center">Add New Product</Title>
-                            {message && (
+                            <Title level={2} className="text-center">
+                                {id ? "Update Product" : "Add Product"}
+                            </Title>
+                            {messageData && (
                                 <Alert
                                     className="mt-3"
-                                    message={message.text}
-                                    type={message.type}
+                                    message={messageData.text}
+                                    type={messageData.type}
                                     showIcon
                                 />
                             )}
@@ -105,7 +139,16 @@ const ProductForm = ({ onSubmit }) => {
                                     <Input type="number" placeholder="Enter price" />
                                 </Form.Item>
 
-                                <Form.Item label="Upload Image" name="productImage" rules={[{ required: true, message: "Please upload an image" }]}>
+                                <Form.Item label="Upload Image" name="productImage">
+                                    {existingImage && !file && (
+                                        <div>
+                                            <img
+                                                src={`http://localhost:5000${existingImage}`}
+                                                alt="Product"
+                                                style={{ width: "100px", marginBottom: "10px" }}
+                                            />
+                                        </div>
+                                    )}
                                     <Upload beforeUpload={() => false} listType="picture" onChange={handleFileChange}>
                                         <Button icon={<UploadOutlined />}>Click to Upload</Button>
                                     </Upload>
@@ -113,7 +156,7 @@ const ProductForm = ({ onSubmit }) => {
 
                                 <Form.Item>
                                     <Button type="primary" htmlType="submit" block loading={loading}>
-                                        Add Product
+                                        {id ? "Update Product" : "Add Product"}
                                     </Button>
                                 </Form.Item>
                             </Form>

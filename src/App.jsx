@@ -16,6 +16,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/add-product" element={<ProductForm />} />
+        <Route path="/update-product/:id" element={<ProductForm />} />
         <Route path="/*" element={<Login />} />
       </Routes>
     </Router>
