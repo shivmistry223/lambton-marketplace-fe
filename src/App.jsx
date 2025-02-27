@@ -4,6 +4,7 @@ import Register from "./components/Register/Register";
 import ResetPassword from "./components/Auth/ResetPassword";
 import ForgotPassword from "./components/Auth/ForgotPassword";
 import Dashboard from "./components/Dashboard/Dashboard";
+import ProductForm from "./components/ProductForm/ProductForm";
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/add-product" element={<ProductForm />} />
+        <Route path="/update-product/:id" element={<ProductForm />} />
         <Route path="/*" element={<Login />} />
       </Routes>
     </Router>
