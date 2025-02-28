@@ -25,7 +25,8 @@ const CustomHeader = ({ handleLogout }) => {
                 <img
                     src="/src/assets/LambtonCollege_Logo.png"
                     alt="Lambton Logo"
-                    style={{ height: "40px" }}
+                    style={{ height: "40px", cursor: "pointer" }}
+                    onClick={() => navigate("/dashboard")}
                 />
                 <Button type="primary" className="me-3" onClick={navigateToProduct}>Add Product +</Button>
 
