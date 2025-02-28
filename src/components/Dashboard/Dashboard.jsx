@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { Layout, Menu, Tabs, Button, Avatar, message } from "antd";
-import { Container, Row, Col } from "react-bootstrap";
+import { Layout, Menu, Button, Avatar, message } from "antd";
+import { Container } from "react-bootstrap";
 import { UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
-const { Header, Content } = Layout;
+const { Header } = Layout;
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -18,7 +18,6 @@ const Dashboard = () => {
         }
     }, []);
 
-
     const handleLogout = async () => {
         try {
             const response = await fetch("http://localhost:5000/logout", {
@@ -26,8 +25,8 @@ const Dashboard = () => {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
-                }
-            })
+                },
+            });
             const data = await response.json();
 
             if (response.ok) {
@@ -40,7 +39,7 @@ const Dashboard = () => {
         } catch (error) {
             message.error("Network error, please try again.");
         }
-    }
+    };
 
     return (
         <Layout style={{ minHeight: "100vh", minWidth: "100vw" }}>
@@ -54,19 +53,28 @@ const Dashboard = () => {
                         items={[
                             { key: "1", label: <b>Your Dashboard</b>, className: "text-primary" },
                             { key: "2", label: "Your Products" },
-
                         ]}
                     />
                 </div>
                 <div className="d-flex align-items-center">
                     <Button type="primary" className="me-3">Add Product +</Button>
-                    <Avatar size="large" icon={<UserOutlined />} />
-                    <Button className="ms-2" type="primary" danger onClick={handleLogout}>Logout</Button>
+                    
+                    {/* Add onClick event to navigate to the settings page */}
+                    <Avatar 
+                        size="large" 
+                        icon={<UserOutlined />} 
+                        style={{ cursor: "pointer" }} 
+                        onClick={() => navigate("/settings")} 
+                    />
+
+                    <Button className="ms-2" type="primary" danger onClick={handleLogout}>
+                        Logout
+                    </Button>
                 </div>
             </Header>
 
             <Container className="mt-4">
-
+                {/* Your content goes here */}
             </Container>
         </Layout>
     );
