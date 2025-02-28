@@ -40,7 +40,7 @@ const CustomHeader = ({ handleLogout }) => {
                 />
             </div>
             <div className="d-flex align-items-center">
-                <Avatar size="large" icon={<UserOutlined />} />
+                <Avatar size="large" style={{cursor:"pointer"}} icon={<UserOutlined />} onClick={() => navigate("/profile")}/>
                 <Button className="ms-2" type="primary" danger onClick={handleLogout}>Logout</Button>
             </div>
         </Header>
