@@ -4,7 +4,6 @@ import { Container, Row, Col } from "react-bootstrap";
 import { UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import CustomHeader from "../Header/CustomHeader";
-import { handleLogout, userExists } from "../../utils/helper";
 
 const { Header, Content } = Layout;
 
@@ -14,7 +13,7 @@ const Dashboard = () => {
 
     return (
         <Layout style={{ minHeight: "100vh", minWidth: "100vw" }}>
-            <CustomHeader handleLogout={handleLogout} />
+            <CustomHeader />
             <Container className="mt-4">
 
             </Container>
