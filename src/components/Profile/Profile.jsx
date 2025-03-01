@@ -1,24 +1,94 @@
-import React, { useState } from "react";
-import { Form, Input, Select, Button, message, Card, Layout } from "antd";
-import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState, useEffect } from "react";
+import {
+    Form,
+    Input,
+    Select,
+    Button,
+    message,
+    Card,
+    Layout,
+} from "antd";
 import CustomHeader from "../Header/CustomHeader";
-import { handleLogout } from "../../utils/helper";
 import { Container } from "react-bootstrap";
+import { PROFILE, PROFILE_RESET_PASSWORD } from "../../utils/constant";
 
 const { Option } = Select;
 
 const Profile = () => {
     const [loading, setLoading] = useState(false);
-    const collegeID = "123456789";
+    const token = localStorage.getItem("token");
+    const [form] = Form.useForm();
+    const [passwordForm] = Form.useForm();
+    const [messageApi, contextHolder] = message.useMessage();
+
+    useEffect(() => {
+        const fetchProfileData = async () => {
+            try {
+                const response = await fetch(PROFILE, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to fetch profile data");
+                }
+                const data = await response.json();
+
+                form.setFieldsValue({
+                    userName: data.userName,
+                    fullName: data.fullName,
+                    courseCode: data.courseCode,
+                    termNo: data.termNo,
+                    phoneNumber: data.phoneNumber,
+                });
+            } catch (error) {
+                messageApi.open({
+                    type: "error",
+                    content: "Failed to load profile data.",
+                });
+            }
+        };
+
+        fetchProfileData();
+    }, [token, form]);
 
     const onFinishPersonalInfo = async (values) => {
         setLoading(true);
         try {
-            await axios.post("http://localhost:5000/user", { ...values, collegeID });
-            message.success("Profile updated successfully!");
+            const response = await fetch(PROFILE, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ ...values }),
+            });
+            const data = await response.json();
+            if (response.ok) {
+                messageApi.open({
+                    type: "success",
+                    content: "Profile updated successfully!",
+                });
+                form.setFieldsValue({
+                    userName: data.userName,
+                    fullName: data.fullName,
+                    courseCode: data.courseCode,
+                    termNo: data.termNo,
+                    phoneNumber: data.phoneNumber,
+                });
+            } else {
+                messageApi.open({
+                    type: "error",
+                    content: data.error || "Failed to reset password.",
+                });
+            }
         } catch (error) {
-            message.error("Failed to update profile.");
+            messageApi.open({
+                type: "error",
+                content: "Failed to update profile!",
+            });
+            form.resetFields();
         } finally {
             setLoading(false);
         }
@@ -27,15 +97,41 @@ const Profile = () => {
     const onFinishPassword = async (values) => {
         setLoading(true);
         if (values.newPassword !== values.confirmPassword) {
-            message.error("Passwords do not match!");
+            messageApi.open({
+                type: "error",
+                content: "Passwords do not match!",
+            });
             setLoading(false);
             return;
         }
         try {
-            await axios.post("http://localhost:5000/reset-password", values);
-            message.success("Password changed successfully!");
+            const response = await fetch(
+                PROFILE_RESET_PASSWORD,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ ...values }),
+                }
+            );
+            await response.json();
+
+            if (response.ok) {
+                setLoading(false);
+                passwordForm.resetFields();
+                messageApi.open({
+                    type: "success",
+                    content: "Password changed successfully!",
+                });
+            }
         } catch (error) {
-            message.error("Failed to change password.");
+            setLoading(false);
+            messageApi.open({
+                type: "error",
+                content: "Failed to change password.",
+            });
         } finally {
             setLoading(false);
         }
@@ -43,65 +139,155 @@ const Profile = () => {
 
     return (
         <Layout style={{ minHeight: "100vh", minWidth: "100vw" }}>
-        <CustomHeader handleLogout={handleLogout} />
-        <Container className="mt-4">
-        <div className="container mt-5 d-flex justify-content-center">
-            <div className="d-flex flex-wrap justify-content-between w-100" style={{ maxWidth: "100%" }}>
-                {/* Student Information Form */}
-                <Card title="Student Information" bordered={false} style={{ flex: 1, marginRight: "10px", minWidth: "350px", boxShadow: "0px 4px 12px rgba(0,0,0,0.1)" }}>
-                    <Form layout="vertical" onFinish={onFinishPersonalInfo}>
-                        <Form.Item label="College ID" name="collegeID" initialValue={collegeID}>
-                            <Input disabled />
-                        </Form.Item>
-                        <Form.Item label="Full Name" name="fullName" rules={[{ required: true, message: "Please enter your full name" }]}>
-                            <Input />
-                        </Form.Item>
-                        <Form.Item label="Course Code" name="courseCode" rules={[{ required: true, message: "Please enter your Course Code" }]}>
-                            <Input />
-                        </Form.Item>
-                        <Form.Item label="Term Number" name="termNumber" rules={[{ required: true, message: "Please select your Term Number" }]}>
-                            <Select placeholder="Select Term">
-                                <Option value="1">1</Option>
-                                <Option value="2">2</Option>
-                                <Option value="3">3</Option>
-                                <Option value="4">4</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item label="Phone Number" name="phoneNumber" rules={[{ required: true, message: "Please enter your Phone Number" }, { pattern: /^[0-9]{10}$/, message: "Phone Number must be 10 digits" }]}>
-                            <Input />
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit" loading={loading} block>
-                                Update Profile
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </Card>
+            {contextHolder}
 
-                {/* Change Password Form */}
-                <Card title="Change Password" bordered={false} style={{ flex: 1, minWidth: "350px", boxShadow: "0px 4px 12px rgba(0,0,0,0.1)" }}>
-                    <Form layout="vertical" onFinish={onFinishPassword}>
-                        <Form.Item label="Old Password" name="oldPassword" rules={[{ required: true, message: "Please enter your old password" }]}>
-                            <Input.Password />
-                        </Form.Item>
-                        <Form.Item label="New Password" name="newPassword" rules={[{ required: true, message: "Please enter a new password" }]}>
-                            <Input.Password />
-                        </Form.Item>
-                        <Form.Item label="Confirm Password" name="confirmPassword" rules={[{ required: true, message: "Please confirm your password" }]}>
-                            <Input.Password />
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit" loading={loading} block>
-                                Update Password
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </Card>
-            </div>
-        </div>
+            <CustomHeader />
+            <Container>
+                <div className="container mt-5 d-flex justify-content-center">
+                    <div
+                        className="d-flex flex-wrap justify-content-between w-100"
+                        style={{ maxWidth: "100%" }}
+                    >
+                        <Card
+                            title="Student Information"
+                            bordered={false}
+                            style={{
+                                flex: 1,
+                                marginRight: "10px",
+                                minWidth: "350px",
+                                boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
+                            }}
+                        >
+                            <Form
+                                layout="vertical"
+                                onFinish={onFinishPersonalInfo}
+                                form={form}
+                            >
+                                <Form.Item label="College ID" name="userName">
+                                    <Input disabled />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Full Name"
+                                    name="fullName"
+                                    rules={[
+                                        { required: true, message: "Please enter your full name" },
+                                    ]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Course Code"
+                                    name="courseCode"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Please enter your Course Code",
+                                        },
+                                    ]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Term Number"
+                                    name="termNo"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Please select your Term Number",
+                                        },
+                                    ]}
+                                >
+                                    <Select placeholder="Select Term">
+                                        <Option value="1">1</Option>
+                                        <Option value="2">2</Option>
+                                        <Option value="3">3</Option>
+                                        <Option value="4">4</Option>
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item
+                                    label="Phone Number"
+                                    name="phoneNumber"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Please enter your Phone Number",
+                                        },
+                                        {
+                                            pattern: /^[0-9]{10}$/,
+                                            message: "Phone Number must be 10 digits",
+                                        },
+                                    ]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button type="primary" htmlType="submit" block>
+                                        Update Profile
+                                    </Button>
+                                </Form.Item>
+                            </Form>
+                        </Card>
+
+                        <Card
+                            title="Change Password"
+                            bordered={false}
+                            style={{
+                                flex: 1,
+                                minWidth: "350px",
+                                boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
+                            }}
+                        >
+                            <Form
+                                layout="vertical"
+                                onFinish={onFinishPassword}
+                                form={passwordForm}
+                            >
+                                <Form.Item
+                                    label="Old Password"
+                                    name="oldPassword"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Please enter your old password",
+                                        },
+                                    ]}
+                                >
+                                    <Input.Password />
+                                </Form.Item>
+                                <Form.Item
+                                    label="New Password"
+                                    name="newPassword"
+                                    rules={[
+                                        { required: true, message: "Please enter a new password" },
+                                    ]}
+                                >
+                                    <Input.Password />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Confirm Password"
+                                    name="confirmPassword"
+                                    rules={[
+                                        { required: true, message: "Please confirm your password" },
+                                    ]}
+                                >
+                                    <Input.Password />
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button
+                                        type="primary"
+                                        htmlType="submit"
+                                        loading={loading}
+                                        block
+                                    >
+                                        Update Password
+                                    </Button>
+                                </Form.Item>
+                            </Form>
+                        </Card>
+                    </div>
+                </div>
             </Container>
-            </Layout>
-       
+        </Layout>
     );
 };
 

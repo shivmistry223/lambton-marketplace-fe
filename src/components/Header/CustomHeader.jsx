@@ -1,16 +1,19 @@
 import React, { useEffect } from "react";
-import { Layout, Menu, Button, Avatar } from "antd";
+import { Layout, Menu, Button, Avatar, message } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { userExists } from "../../utils/helper";
+import { LOGOUT } from "../../utils/constant";
 
 const { Header } = Layout;
 
-const CustomHeader = ({ handleLogout }) => {
+const CustomHeader = () => {
 
     const navigate = useNavigate()
 
     const navigateToProduct = () => navigate("/add-product");
+
+    const token = localStorage.getItem('token')
 
     useEffect(() => {
         if (!userExists()) {
@@ -19,13 +22,38 @@ const CustomHeader = ({ handleLogout }) => {
         }
     }, []);
 
+    const handleLogout = async () => {
+
+        try {
+            const response = await fetch(LOGOUT, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                message.success(data.message || "Logged out successfully.");
+                localStorage.removeItem("token");
+                navigate("/login");
+            } else {
+                message.error(data.message || "Logout failed.");
+            }
+        } catch (error) {
+            message.error("Network error, please try again.");
+        }
+    };
+
     return (
         <Header className="d-flex justify-content-between align-items-center px-4 bg-white shadow-sm">
             <div className="d-flex align-items-center gap-4">
                 <img
                     src="/src/assets/LambtonCollege_Logo.png"
                     alt="Lambton Logo"
-                    style={{ height: "40px" }}
+                    style={{ height: "40px", cursor: "pointer" }}
+                    onClick={() => navigate("/dashboard")}
                 />
                 <Button type="primary" className="me-3" onClick={navigateToProduct}>Add Product +</Button>
 
@@ -40,7 +68,7 @@ const CustomHeader = ({ handleLogout }) => {
                 />
             </div>
             <div className="d-flex align-items-center">
-                <Avatar size="large" style={{cursor:"pointer"}} icon={<UserOutlined />} onClick={() => navigate("/profile")}/>
+                <Avatar size="large" style={{ cursor: "pointer" }} icon={<UserOutlined />} onClick={() => navigate("/profile")} />
                 <Button className="ms-2" type="primary" danger onClick={handleLogout}>Logout</Button>
             </div>
         </Header>

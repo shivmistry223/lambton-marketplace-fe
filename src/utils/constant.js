@@ -11,3 +11,6 @@ export const REGISTER = "http://localhost:5000/register";
 export const RESET_PASSWORD = "http://localhost:5000/reset-password";
 export const FORGOT_PASSWORD = "http://localhost:5000/forgot-password";
 export const LOGOUT = "http://localhost:5000/logout";
+export const PROFILE = "http://localhost:5000/user";
+export const PROFILE_RESET_PASSWORD =
+  "http://localhost:5000/profile-reset-password";
