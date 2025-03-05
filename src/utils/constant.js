@@ -17,9 +17,9 @@ export const PROFILE_RESET_PASSWORD =
   "http://localhost:5000/profile-reset-password";
 
 export const PRODUCT_DATA = {
-  productName: "test3",
+  productName: "NIKE SHOES",
   productDescription: "test43",
-  productimageUrl: "/products/1740689261956.jpg",
+  productimageUrl: "/products/1741203180592.jpg",
   productCatagory: "books",
   productPrice: 23,
   isSold: false,
@@ -27,4 +27,5 @@ export const PRODUCT_DATA = {
     $oid: "67bb3f22190b36c9dea9da1d",
   },
   __v: 0,
+  fromProfile: true,
 };
