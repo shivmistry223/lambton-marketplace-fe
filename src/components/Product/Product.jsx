@@ -4,14 +4,16 @@ import { Space, Tag } from "antd";
 import { IMAGEDIR } from "../../utils/constant";
 import { UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { getUserId } from "../../utils/helper";
 
 const Product = (product) => {
-    const currentUserId = 12;
+    const currentUserId = getUserId();
 
     const navigate = useNavigate()
 
-    // const isOwner = productOwner === currentUserId;
-    const isOwner = true;
+    const isOwner = product?.productOwner?._id === currentUserId;
+
+    const { productOwner } = product
     const onUpdate = (id) => {
         navigate(`/update-product/${id}`)
     }
@@ -53,40 +55,47 @@ const Product = (product) => {
                 </Card.Text>
                 <Card.Text>
                     <span>
-                        <UserOutlined /> Shiv Mistry
+                        <UserOutlined /> {productOwner.fullName}
                     </span>
                 </Card.Text>
 
-                <div>
+                <div className="d-flex gap-2">
                     <Button
                         variant="primary"
-                        style={{ width: "100%" }}
+                        style={{ width: !isOwner && "100%", flex: 1, }}
                         onClick={() => onView(product._id)}
                     >
                         View
                     </Button>
-                </div>
-
-                {isOwner && (
-                    <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
+                    {isOwner && (
                         <Button
                             variant="outline-primary"
                             onClick={() => onUpdate(product._id)}
                             style={{ flex: 1 }}
+
                         >
                             Update
                         </Button>
+                    )}
+                </div>
+
+                {isOwner && !product.isSold && (
+                    <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
                         <Button
                             variant="danger"
-                            onClick={() => onDelete(product._id)}
+                            onClick={() => onUpdate(product._id)}
                             style={{ flex: 1 }}
+
                         >
-                            Delete
+                            Mark As Sold
                         </Button>
                     </div>
                 )}
+
+
+
             </Card.Body>
-        </Card>
+        </Card >
     );
 };
 

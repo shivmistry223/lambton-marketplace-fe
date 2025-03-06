@@ -26,6 +26,7 @@ export default function Login() {
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
         form.resetFields();
         window.location.href = "/dashboard";
       } else {
