@@ -4,19 +4,20 @@ import { Space, Tag } from "antd";
 import { IMAGEDIR } from "../../utils/constant";
 import { UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { getUserId } from "../../utils/helper";
+import { getUserId, truncateText } from "../../utils/helper";
 
 const Product = (product) => {
     const currentUserId = getUserId();
 
     const navigate = useNavigate()
 
-    const isOwner = product?.productOwner?._id === currentUserId;
+    const isOwner = product?.productOwner?._id === currentUserId && product.currentKey === "2";
 
     const { productOwner } = product
-    const onUpdate = (id) => {
-        navigate(`/update-product/${id}`)
-    }
+
+    const onUpdate = (id) => navigate(`/update-product/${id}`)
+
+    const onView = (id) => navigate(`/product-detail/${id}`)
     return (
         <Card
             style={{
@@ -42,7 +43,7 @@ const Product = (product) => {
                 }}
             />
             <Card.Body>
-                <Card.Title>{product.productName}</Card.Title>
+                <Card.Title>{truncateText(product.productName, 20)}</Card.Title>
                 <Card.Text>
                     <strong>$ {" "}{product.productPrice}</strong>
                 </Card.Text>

@@ -84,7 +84,7 @@ const Dashboard = () => {
                             <>
                                 <div className="d-flex flex-wrap justify-content-start gap-4" style={{ gap: "20px" }}>
                                     {products.map((product, _id) => (
-                                        <Product {...product} key={_id} />
+                                        <Product {...product} key={_id} currentKey={currentKey} />
                                     ))}
                                 </div>
                                 <Pagination
