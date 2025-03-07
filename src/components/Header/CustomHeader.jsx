@@ -7,7 +7,7 @@ import { LOGOUT } from "../../utils/constant";
 
 const { Header } = Layout;
 
-const CustomHeader = () => {
+const CustomHeader = ({ currentKey = "1", setCurrentKey = () => { } }) => {
 
     const navigate = useNavigate()
 
@@ -37,6 +37,7 @@ const CustomHeader = () => {
             if (response.ok) {
                 message.success(data.message || "Logged out successfully.");
                 localStorage.removeItem("token");
+                localStorage.removeItem("user");
                 navigate("/login");
             } else {
                 message.error(data.message || "Logout failed.");
@@ -62,9 +63,12 @@ const CustomHeader = () => {
                     defaultSelectedKeys={["1"]}
                     className="ms-4"
                     items={[
-                        { key: "1", label: <b>Your Dashboard</b>, className: "text-primary" },
-                        { key: "2", label: "Your Products" },
+                        { key: "1", label: <b>Dashboard</b>, className: currentKey == "1" && "text-primary" },
+                        { key: "2", label: "Your Products", className: currentKey == "2" && "text-primary" },
                     ]}
+                    selectedKeys={currentKey}
+                    onSelect={(e) => setCurrentKey(e.key)}
+                    selectable={true}
                 />
             </div>
             <div className="d-flex align-items-center">

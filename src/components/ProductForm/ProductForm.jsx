@@ -20,6 +20,7 @@ const ProductForm = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         if (id) {
@@ -29,7 +30,11 @@ const ProductForm = () => {
 
     const fetchProductData = async (productId) => {
         try {
-            const response = await fetch(`${PRODUCT}/${productId}`);
+            const response = await fetch(`${PRODUCT}/${productId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             const data = await response.json();
 
             if (response.ok) {
@@ -51,7 +56,6 @@ const ProductForm = () => {
     const handleFinish = async (values) => {
         try {
             setLoading(true);
-            const token = localStorage.getItem("token");
 
             const formData = new FormData();
             formData.append("productName", values.productName);
