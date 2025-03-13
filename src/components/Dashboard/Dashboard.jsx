@@ -16,9 +16,12 @@ const Dashboard = () => {
     const [totalPage, setTotalPage] = useState(0);
     const [pageSize, setPageSize] = useState(8);
     const [currentKey, setCurrentKey] = useState(1);
+    const [searchValue, setSearchValue] = useState("");
 
     const token = localStorage.getItem("token")
     const ownerId = getUserId()
+    let searchTimeout;
+
 
     const checkOwner = () => {
         return currentKey === "2" ? `&ownerId=${ownerId}` : ""
@@ -62,9 +65,36 @@ const Dashboard = () => {
         return product ? product.label : "All";
     };
 
+    const handleSearch = (value) => {
+        setLoading(true);
+        setSearchValue(value);
+        clearTimeout(searchTimeout);
+
+        const url = `${PRODUCT}?search=${value}&category=${activeTab}&page=${currentPage}&pageSize=${pageSize}${checkOwner()}`
+
+        searchTimeout = setTimeout(async () => {
+            try {
+                const response = await fetch(url, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const data = await response.json();
+                setProducts(data.products);
+                setTotalPage(data.totaPages)
+                setPageSize(data.totalCount)
+            } catch (error) {
+                message.error("Error fetching search results.");
+            }
+        }, 1000);
+        setLoading(false);
+
+    };
     return (
         <Layout style={{ minHeight: "100vh", minWidth: "100vw" }}>
-            <CustomHeader currentKey={currentKey} setCurrentKey={setCurrentKey} />
+            <CustomHeader currentKey={currentKey} setCurrentKey={setCurrentKey} searchValue={searchValue} handleSearch={handleSearch} />
             <Container>
                 <Row className="flex-column align-items-center ">
 
