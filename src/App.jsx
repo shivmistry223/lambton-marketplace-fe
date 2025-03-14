@@ -7,6 +7,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import ProductForm from "./components/ProductForm/ProductForm";
 import Profile from "./components/Profile/Profile";
 import ProductDetail from "./components/Product/ProductDetail";
+import OwnerDetail from "./components/OwnerDetail/OwnerDetail";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/update-product/:id" element={<ProductForm />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/product-detail/:productId" element={<ProductDetail />} />
+        <Route path="/owner-detail/:ownerId" element={<OwnerDetail />} />
         <Route path="/*" element={<Login />} />
 
       </Routes>
