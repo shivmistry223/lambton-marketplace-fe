@@ -15,6 +15,7 @@ export const IMAGEDIR = "http://localhost:5000";
 export const PROFILE = "http://localhost:5000/user";
 export const PROFILE_RESET_PASSWORD =
   "http://localhost:5000/profile-reset-password";
+export const OWNER = "http://localhost:5000/owner";
 
 export const PRODUCT_DATA = {
   productName: "NIKE SHOES",
