@@ -15,18 +15,9 @@ export const IMAGEDIR = "http://localhost:5000";
 export const PROFILE = "http://localhost:5000/user";
 export const PROFILE_RESET_PASSWORD =
   "http://localhost:5000/profile-reset-password";
+export const UPDATE_STATUS = "http://localhost:5000/update-payment-status";
+export const PAYMENT = "http://localhost:5000/create-payment-intent";
 export const OWNER = "http://localhost:5000/owner";
 
-export const PRODUCT_DATA = {
-  productName: "NIKE SHOES",
-  productDescription: "test43",
-  productimageUrl: "/products/1741203180592.jpg",
-  productCatagory: "books",
-  productPrice: 23,
-  isSold: false,
-  productOwner: {
-    $oid: "67bb3f22190b36c9dea9da1d",
-  },
-  __v: 0,
-  fromProfile: true,
-};
+export const STRIPE_PUBLIC_KEY =
+  "pk_test_51R2BVwGgfYH3pNgqo1NSrnhW7qmcqQI5stNRi2mELRLgg11zUXhlcCMqUIF0nCmePGXlJJEFDUFfujvwPMYdwV7n00pLW5deEl";
