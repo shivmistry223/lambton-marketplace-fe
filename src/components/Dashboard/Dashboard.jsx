@@ -3,7 +3,7 @@ import { Layout, Menu, Tabs, Button, Avatar, message, Pagination, Skeleton } fro
 import { Container, Row, Col, Card, TabPane } from "react-bootstrap";
 import CustomHeader from "../Header/CustomHeader";
 import Product from "../Product/Product";
-import { PRODUCT, PRODUCT_DATA, PRODUCT_TYPES } from "../../utils/constant";
+import { PRODUCT, PRODUCT_TYPES } from "../../utils/constant";
 import { getUserId } from "../../utils/helper";
 
 const { Header, Content } = Layout;
