@@ -7,6 +7,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import ProductForm from "./components/ProductForm/ProductForm";
 import Profile from "./components/Profile/Profile";
 import ProductDetail from "./components/Product/ProductDetail";
+import Payment from "./components/Payment/Payment";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/add-product" element={<ProductForm />} />
         <Route path="/update-product/:id" element={<ProductForm />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/payment" element={<Payment />} />
         <Route path="/product-detail/:productId" element={<ProductDetail />} />
         <Route path="/*" element={<Login />} />
 
