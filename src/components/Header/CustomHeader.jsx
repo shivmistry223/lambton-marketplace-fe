@@ -1,19 +1,16 @@
-import React, { useEffect } from "react";
-import { Layout, Menu, Button, Avatar, message } from "antd";
+import React, { useEffect, useState } from "react";
+import { Layout, Menu, Button, Avatar, message, Input } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { userExists } from "../../utils/helper";
 import { LOGOUT } from "../../utils/constant";
 
 const { Header } = Layout;
+const { Search } = Input;
 
-const CustomHeader = ({ currentKey = "1", setCurrentKey = () => { } }) => {
-
-    const navigate = useNavigate()
-
-    const navigateToProduct = () => navigate("/add-product");
-
-    const token = localStorage.getItem('token')
+const CustomHeader = ({ currentKey = "1", setCurrentKey = () => { }, searchValue = "", handleSearch = () => { } }) => {
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         if (!userExists()) {
@@ -22,8 +19,9 @@ const CustomHeader = ({ currentKey = "1", setCurrentKey = () => { } }) => {
         }
     }, []);
 
-    const handleLogout = async () => {
+    const navigateToProduct = () => navigate("/add-product");
 
+    const handleLogout = async () => {
         try {
             const response = await fetch(LOGOUT, {
                 method: "POST",
@@ -56,8 +54,9 @@ const CustomHeader = ({ currentKey = "1", setCurrentKey = () => { } }) => {
                     style={{ height: "40px", cursor: "pointer" }}
                     onClick={() => navigate("/dashboard")}
                 />
-                <Button type="primary" className="me-3" onClick={navigateToProduct}>Add Product +</Button>
-
+                <Button type="primary" className="me-3" onClick={navigateToProduct}>
+                    Add Product +
+                </Button>
                 <Menu
                     mode="horizontal"
                     defaultSelectedKeys={["1"]}
@@ -71,9 +70,18 @@ const CustomHeader = ({ currentKey = "1", setCurrentKey = () => { } }) => {
                     selectable={true}
                 />
             </div>
+            <Search
+                placeholder="Search products..."
+                onChange={(e) => handleSearch(e.target.value)}
+                value={searchValue}
+                style={{ width: 300 }}
+                allowClear
+            />
             <div className="d-flex align-items-center">
                 <Avatar size="large" style={{ cursor: "pointer" }} icon={<UserOutlined />} onClick={() => navigate("/profile")} />
-                <Button className="ms-2" type="primary" danger onClick={handleLogout}>Logout</Button>
+                <Button className="ms-2" type="primary" danger onClick={handleLogout}>
+                    Logout
+                </Button>
             </div>
         </Header>
     );
