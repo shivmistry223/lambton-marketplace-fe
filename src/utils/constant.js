@@ -18,6 +18,7 @@ export const PROFILE_RESET_PASSWORD =
 export const UPDATE_STATUS = "http://localhost:5000/update-payment-status";
 export const PAYMENT = "http://localhost:5000/create-payment-intent";
 export const OWNER = "http://localhost:5000/owner";
+export const PAYMENT_LIST = "http://localhost:5000/get-payment-list";
 
 export const STRIPE_PUBLIC_KEY =
   "pk_test_51R2BVwGgfYH3pNgqo1NSrnhW7qmcqQI5stNRi2mELRLgg11zUXhlcCMqUIF0nCmePGXlJJEFDUFfujvwPMYdwV7n00pLW5deEl";

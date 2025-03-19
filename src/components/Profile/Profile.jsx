@@ -7,10 +7,12 @@ import {
     message,
     Card,
     Layout,
+    Table,
+    Tag,
 } from "antd";
 import CustomHeader from "../Header/CustomHeader";
 import { Container } from "react-bootstrap";
-import { PROFILE, PROFILE_RESET_PASSWORD } from "../../utils/constant";
+import { PAYMENT_LIST, PROFILE, PROFILE_RESET_PASSWORD } from "../../utils/constant";
 
 const { Option } = Select;
 
@@ -20,6 +22,8 @@ const Profile = () => {
     const [form] = Form.useForm();
     const [passwordForm] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
+    const [payments, setPayments] = useState([]);
+
 
     useEffect(() => {
         const fetchProfileData = async () => {
@@ -51,6 +55,7 @@ const Profile = () => {
         };
 
         fetchProfileData();
+        fetchPayments()
     }, [token, form]);
 
     const onFinishPersonalInfo = async (values) => {
@@ -136,6 +141,69 @@ const Profile = () => {
             setLoading(false);
         }
     };
+
+    const fetchPayments = async () => {
+        try {
+            const response = await fetch(PAYMENT_LIST, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error("Failed to fetch profile data");
+            }
+            const data = await response.json();
+            setPayments(data)
+
+        } catch (error) {
+            messageApi.open({
+                type: "error",
+                content: "Failed to load profile data.",
+            });
+        }
+    };
+
+    const columns = [
+        {
+            title: "User",
+            dataIndex: ["user", "fullName"], // Nested field from user object
+            key: "user",
+        },
+        {
+            title: "Product",
+            dataIndex: ["product", "productName"], // Nested field from product object
+            key: "product",
+        },
+        {
+            title: "Amount ($)",
+            dataIndex: "amount",
+            key: "amount",
+            render: (amount) => `$${amount.toFixed(2)}`,
+        },
+        {
+            title: "Currency",
+            dataIndex: "currency",
+            key: "currency",
+            render: (currency) => currency.toUpperCase(),
+        },
+        {
+            title: "Status",
+            dataIndex: "paymentStatus",
+            key: "paymentStatus",
+            render: (status) => (
+                <Tag color={status === "success" ? "green" : status === "failed" ? "red" : "orange"}>
+                    {status.toUpperCase()}
+                </Tag>
+            ),
+        },
+        {
+            title: "Date",
+            dataIndex: "createdAt",
+            key: "createdAt",
+            render: (date) => new Date(date).toLocaleString(),
+        },
+    ];
 
     return (
         <Layout style={{ minHeight: "100vh", minWidth: "100vw" }}>
@@ -285,7 +353,17 @@ const Profile = () => {
                             </Form>
                         </Card>
                     </div>
+
                 </div>
+                <Card className="p-3 m-3">
+                    <h2>Payment History</h2>
+                    <Table
+                        columns={columns}
+                        dataSource={payments}
+                        rowKey="_id"
+                        loading={loading}
+                    />
+                </Card>
             </Container>
         </Layout>
     );
