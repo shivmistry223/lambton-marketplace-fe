@@ -42,72 +42,26 @@ const ProductDetail = () => {
                 });
                 navigate("/dashboard");
             });
-        fetchReviews()
     }, [productId]);
 
-    const fetchReviews = async () => {
-        try {
-            const response = await fetch(`http://localhost:5000/get-review/${productId}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to fetch reviews");
-            }
-
-            const data = await response.json();
-            setReviews(
-                data.map((review) => ({
-                    rating: review.rating,
-                    text: review.comment,
-                    user: review.reviewer?.fullName || "Anonymous",
-                    date: new Date(review.date).toLocaleDateString(),
-                }))
-            );
-        } catch (error) {
-            console.error("Error fetching reviews:", error);
-            messageApi.open({
-                type: "error",
-                content: "Error fetching product : " + error.message,
-            });
-        }
-    };
-
-
     const handleAddReview = async () => {
-        if (!reviewText || rating === 0) return;
+        if (!reviewText) return;
 
         const newReview = {
-            productId,
-            comment: reviewText,
+            text: reviewText,
             rating,
+            user: "Anonymous",
+            date: new Date().toLocaleDateString(),
         };
 
+        setReviews([...reviews, newReview]);
+        setReviewText("");
+        setRating(0);
+
         try {
-            const response = await fetch("http://localhost:5000/add-review", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`, // Include auth token if required
-                },
-                body: JSON.stringify(newReview),
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to submit review");
-            }
-
-            const data = await response.json();
-            setReviews([...reviews, { ...data, date: new Date(data.date).toLocaleDateString() }]);
-
-            setReviewText("");
-            setRating(0);
+            //    api call in future
         } catch (error) {
             console.error("Error submitting review:", error);
-            messageApi.open({
-                type: "error",
-                content: "Error fetching product : " + error.message,
-            });
         }
     };
 
@@ -201,8 +155,6 @@ const ProductDetail = () => {
                                 type="primary"
                                 block
                                 onClick={() => onUpdate(product?._id)}
-                                disabled={product.isSold}
-
                             >
                                 Update Product
                             </Button>

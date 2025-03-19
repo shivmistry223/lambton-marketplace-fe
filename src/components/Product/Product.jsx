@@ -1,27 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import { Card, Button } from "react-bootstrap";
 import { Space, Tag } from "antd";
 import { IMAGEDIR } from "../../utils/constant";
-import { UserOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getUserId, truncateText } from "../../utils/helper";
-import { Modal as AntModal } from "antd";
 
-const Product = ({ product, currentKey, handleMarkAsSold, isModalVisible, setIsModalVisible }) => {
+const Product = (product) => {
     const currentUserId = getUserId();
 
     const navigate = useNavigate()
 
-    const isOwner = product?.productOwner?._id === currentUserId && currentKey === "2";
+    const isOwner = product?.productOwner?._id === currentUserId && product.currentKey === "2";
 
     const { productOwner } = product
-
 
     const onUpdate = (id) => navigate(`/update-product/${id}`)
 
     const onView = (id) => navigate(`/product-detail/${id}`)
-
-    return (<>
+    return (
         <Card
             style={{
                 width: "100%",
@@ -51,7 +48,7 @@ const Product = ({ product, currentKey, handleMarkAsSold, isModalVisible, setIsM
                     <strong>$ {" "}{product.productPrice}</strong>
                 </Card.Text>
                 <Card.Text>
-                    {product.isSold ? (
+                    {product.fromProfile && product.isSold ? (
                         <Tag color="red">Sold</Tag>
                     ) : (
                         <Tag color="green">Available</Tag>
@@ -71,7 +68,7 @@ const Product = ({ product, currentKey, handleMarkAsSold, isModalVisible, setIsM
                     >
                         View
                     </Button>
-                    {isOwner && !product.isSold && (
+                    {isOwner && (
                         <Button
                             variant="outline-primary"
                             onClick={() => onUpdate(product._id)}
@@ -83,13 +80,13 @@ const Product = ({ product, currentKey, handleMarkAsSold, isModalVisible, setIsM
                     )}
                 </div>
 
-                {isOwner && (
+                {isOwner && !product.isSold && (
                     <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
                         <Button
                             variant="danger"
-                            onClick={() => setIsModalVisible(true)}
+                            onClick={() => onUpdate(product._id)}
                             style={{ flex: 1 }}
-                            disabled={product.isSold}
+
                         >
                             Mark As Sold
                         </Button>
@@ -100,17 +97,6 @@ const Product = ({ product, currentKey, handleMarkAsSold, isModalVisible, setIsM
 
             </Card.Body>
         </Card >
-        <AntModal
-            title={<><ExclamationCircleOutlined /> Confirm Action</>}
-            open={isModalVisible}
-            onOk={() => handleMarkAsSold(product._id)}
-            onCancel={() => setIsModalVisible(false)}
-            okText="Yes, Mark as Sold"
-            cancelText="Cancel"
-        >
-            <p>Are you sure you want to mark this product as sold?</p>
-        </AntModal>
-    </>
     );
 };
 
