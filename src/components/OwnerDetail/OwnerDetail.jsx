@@ -17,6 +17,7 @@ import CustomHeader from "../Header/CustomHeader";
 import { Container } from "react-bootstrap";
 import moment from "moment";
 import Product from "../Product/Product";
+import CustomFooter from "../CustomFooter/CustomFooter";
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
@@ -56,14 +57,16 @@ const OwnerDetail = () => {
     const getAvailableProducts = (flag) => {
         return products.filter((product) => product.isSold === flag).length
     }
-
+    const redirectToDashboard = (id) => {
+        navigate("/dashboard")
+    }
     return (
         <Layout
             style={{ minHeight: "100vh", minWidth: "100vw", background: "#f8f9fa" }}
         >
             {contextHolder}
 
-            <CustomHeader />
+            <CustomHeader currentKey="3" setCurrentKey={redirectToDashboard} />
             <Container style={{ margin: "10px auto", width: "100%" }}>
                 <Content>
                     <Card className="shadow-sm mt-3">
@@ -151,6 +154,8 @@ const OwnerDetail = () => {
                     </Card>
                 </Content>
             </Container>
+            <CustomFooter />
+
         </Layout>
     );
 };

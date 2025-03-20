@@ -15,6 +15,7 @@ const Product = ({ product, currentKey, handleMarkAsSold, isModalVisible, setIsM
     const isOwner = product?.productOwner?._id === currentUserId && currentKey === "2";
 
     const { productOwner } = product
+    const [hover, setHover] = useState(false);
 
 
     const onUpdate = (id) => navigate(`/update-product/${id}`)
@@ -28,11 +29,15 @@ const Product = ({ product, currentKey, handleMarkAsSold, isModalVisible, setIsM
                 width: "100%",
                 margin: "10px",
                 maxWidth: "270px",
-                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                boxShadow: hover ? "0px 8px 15px rgba(0, 0, 0, 0.2)" : "0px 4px 10px rgba(0, 0, 0, 0.1)",
                 borderRadius: "10px",
                 transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                transform: hover ? "translateY(-5px)" : "translateY(0)",
+                cursor: "pointer"
             }}
             className="product-card"
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
         >
             <Card.Img
                 variant="top"

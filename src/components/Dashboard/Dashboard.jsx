@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
     Layout,
-    Menu,
     Tabs,
-    Button,
-    Avatar,
     message,
     Pagination,
     Skeleton,
@@ -23,7 +20,7 @@ const Dashboard = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPage, setTotalPage] = useState(0);
+    const [totalPage, setTotalPage] = useState(10);
     const [pageSize, setPageSize] = useState(8);
     const [currentKey, setCurrentKey] = useState(1);
     const [searchValue, setSearchValue] = useState("");
@@ -54,8 +51,7 @@ const Dashboard = () => {
             });
             const data = await response.json();
             setProducts(data.products);
-            setTotalPage(data.totaPages);
-            setPageSize(data.totalCount);
+            setTotalPage(data.totalCount);
         } catch (error) {
             messageApi.open({
                 type: "error",
@@ -96,8 +92,7 @@ const Dashboard = () => {
                 });
                 const data = await response.json();
                 setProducts(data.products);
-                setTotalPage(data.totaPages);
-                setPageSize(data.totalCount);
+                setTotalPage(data.totalCount);
             } catch (error) {
                 message.error("Error fetching search results.");
             }
@@ -118,7 +113,7 @@ const Dashboard = () => {
                 body: JSON.stringify(data),
             });
 
-            const result = await response.json();
+            await response.json();
 
             if (!response.ok) {
                 setIsModalVisible(false);

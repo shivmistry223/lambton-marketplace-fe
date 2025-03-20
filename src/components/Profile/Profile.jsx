@@ -13,6 +13,8 @@ import {
 import CustomHeader from "../Header/CustomHeader";
 import { Container } from "react-bootstrap";
 import { PAYMENT_LIST, PROFILE, PROFILE_RESET_PASSWORD } from "../../utils/constant";
+import { useNavigate } from "react-router-dom";
+import CustomFooter from "../CustomFooter/CustomFooter";
 
 const { Option } = Select;
 
@@ -23,6 +25,7 @@ const Profile = () => {
     const [passwordForm] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
     const [payments, setPayments] = useState([]);
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -45,6 +48,10 @@ const Profile = () => {
                     courseCode: data.courseCode,
                     termNo: data.termNo,
                     phoneNumber: data.phoneNumber,
+                });
+                messageApi.open({
+                    type: "success",
+                    content: "Data Loaded Successfully!",
                 });
             } catch (error) {
                 messageApi.open({
@@ -164,6 +171,8 @@ const Profile = () => {
         }
     };
 
+    const redirectToProduct = (id) => navigate(`/product-detail/${id}`)
+
     const columns = [
         {
             title: "User",
@@ -172,8 +181,9 @@ const Profile = () => {
         },
         {
             title: "Product",
-            dataIndex: ["product", "productName"],
+            dataIndex: "product",
             key: "product",
+            render: (product) => (<span style={{ cursor: "pointer", color: "blue" }} onClick={() => redirectToProduct(product?._id)}>{product.productName}</span>)
         },
         {
             title: "Amount ($)",
@@ -205,11 +215,15 @@ const Profile = () => {
         },
     ];
 
+    const redirectToDashboard = (id) => {
+        navigate("/dashboard")
+    }
+
     return (
-        <Layout style={{ minHeight: "100vh", minWidth: "100vw" }}>
+        <Layout style={{ minHeight: "100vh" }}>
             {contextHolder}
 
-            <CustomHeader />
+            <CustomHeader currentKey="3" setCurrentKey={redirectToDashboard} />
             <Container>
                 <div className="container mt-5 d-flex justify-content-center">
                     <div
@@ -365,6 +379,7 @@ const Profile = () => {
                     />
                 </Card>
             </Container>
+            <CustomFooter />
         </Layout>
     );
 };

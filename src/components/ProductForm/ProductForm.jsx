@@ -5,6 +5,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import CustomHeader from "../Header/CustomHeader";
 import { UploadOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { PRODUCT, PRODUCT_TYPES } from "../../utils/constant";
+import CustomFooter from "../CustomFooter/CustomFooter";
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -135,10 +136,14 @@ const ProductForm = () => {
         }
     };
 
+    const redirectToDashboard = (id) => {
+        navigate("/dashboard")
+    }
+
     return (
         <Layout style={{ minHeight: "100vh", minWidth: "100vw" }}>
-            <CustomHeader />
-            <Container className="mt-4">
+            <CustomHeader currentKey="3" setCurrentKey={redirectToDashboard} />
+            <Container className="mt-4 mb-4">
                 <Row className="justify-content-center">
                     <Col md={6}>
                         <div style={{ boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", padding: "20px", borderRadius: "8px", background: "white" }}>
@@ -219,6 +224,7 @@ const ProductForm = () => {
                 <p><ExclamationCircleOutlined style={{ color: "red", marginRight: "10px" }} />Are you sure you want to delete this product?</p>
                 <p>This action cannot be undone.</p>
             </Modal>
+            <CustomFooter />
         </Layout>
     );
 };
