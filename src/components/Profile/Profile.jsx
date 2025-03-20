@@ -167,12 +167,12 @@ const Profile = () => {
     const columns = [
         {
             title: "User",
-            dataIndex: ["user", "fullName"], // Nested field from user object
+            dataIndex: ["user", "fullName"],
             key: "user",
         },
         {
             title: "Product",
-            dataIndex: ["product", "productName"], // Nested field from product object
+            dataIndex: ["product", "productName"],
             key: "product",
         },
         {

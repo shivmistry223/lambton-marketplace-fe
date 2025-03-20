@@ -53,6 +53,10 @@ const OwnerDetail = () => {
         setMode(e.target.value);
     };
 
+    const getAvailableProducts = (flag) => {
+        return products.filter((product) => product.isSold === flag).length
+    }
+
     return (
         <Layout
             style={{ minHeight: "100vh", minWidth: "100vw", background: "#f8f9fa" }}
@@ -98,11 +102,11 @@ const OwnerDetail = () => {
                             <div className="d-flex gap-4">
                                 <div>
                                     <h3>Available</h3>
-                                    <p>0</p>
+                                    <p>{getAvailableProducts(false)}</p>
                                 </div>
                                 <div>
                                     <h3>Sold</h3>
-                                    <p>0</p>
+                                    <p>{getAvailableProducts(true)}</p>
                                 </div>
                             </div>
                         </div>
@@ -132,7 +136,7 @@ const OwnerDetail = () => {
                                             .filter((product) => product.isSold === mode)
                                             .map((product, _id) => (
                                                 <Product
-                                                    {...product}
+                                                    product={product}
                                                     key={_id}
                                                     currentKey="1"
                                                     fromProfile

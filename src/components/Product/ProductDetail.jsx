@@ -88,7 +88,7 @@ const ProductDetail = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`, // Include auth token if required
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
                 body: JSON.stringify(newReview),
             });
@@ -102,6 +102,7 @@ const ProductDetail = () => {
 
             setReviewText("");
             setRating(0);
+            fetchReviews();
         } catch (error) {
             console.error("Error submitting review:", error);
             messageApi.open({
