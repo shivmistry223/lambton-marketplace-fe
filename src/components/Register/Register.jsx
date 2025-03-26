@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Form, Input, Button, Select, Alert } from "antd";
+import { Form, Input, Button, Select, Alert, Modal } from "antd";
 import { Container, Row, Col } from "react-bootstrap";
 import { REGISTER } from "../../utils/constant";
 
@@ -8,7 +8,7 @@ import { REGISTER } from "../../utils/constant";
 const validateFormData = (data) => {
   const errors = {};
 
-  if (!data.userName) errors.userName = "Username (Email) is required!";
+  if (!data.userName) errors.userName = "Name is required!";
   if (!data.courseCode) errors.courseCode = "Course Code is required!";
   if (!data.termNo) errors.termNo = "Term Number is required!";
   if (!data.fullName) errors.fullName = "Full Name is required!";

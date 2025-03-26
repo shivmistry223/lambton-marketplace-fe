@@ -17,6 +17,7 @@ import CustomHeader from "../Header/CustomHeader";
 import { Container } from "react-bootstrap";
 import moment from "moment";
 import Product from "../Product/Product";
+import CustomFooter from "../CustomFooter/CustomFooter";
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
@@ -53,13 +54,19 @@ const OwnerDetail = () => {
         setMode(e.target.value);
     };
 
+    const getAvailableProducts = (flag) => {
+        return products.filter((product) => product.isSold === flag).length
+    }
+    const redirectToDashboard = (id) => {
+        navigate("/dashboard")
+    }
     return (
         <Layout
             style={{ minHeight: "100vh", minWidth: "100vw", background: "#f8f9fa" }}
         >
             {contextHolder}
 
-            <CustomHeader />
+            <CustomHeader currentKey="3" setCurrentKey={redirectToDashboard} />
             <Container style={{ margin: "10px auto", width: "100%" }}>
                 <Content>
                     <Card className="shadow-sm mt-3">
@@ -98,11 +105,11 @@ const OwnerDetail = () => {
                             <div className="d-flex gap-4">
                                 <div>
                                     <h3>Available</h3>
-                                    <p>0</p>
+                                    <p>{getAvailableProducts(false)}</p>
                                 </div>
                                 <div>
                                     <h3>Sold</h3>
-                                    <p>0</p>
+                                    <p>{getAvailableProducts(true)}</p>
                                 </div>
                             </div>
                         </div>
@@ -132,7 +139,7 @@ const OwnerDetail = () => {
                                             .filter((product) => product.isSold === mode)
                                             .map((product, _id) => (
                                                 <Product
-                                                    {...product}
+                                                    product={product}
                                                     key={_id}
                                                     currentKey="1"
                                                     fromProfile
@@ -147,6 +154,8 @@ const OwnerDetail = () => {
                     </Card>
                 </Content>
             </Container>
+            <CustomFooter />
+
         </Layout>
     );
 };

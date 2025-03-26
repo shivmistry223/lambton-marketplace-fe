@@ -62,21 +62,22 @@ const CustomHeader = ({ currentKey = "1", setCurrentKey = () => { }, searchValue
                     defaultSelectedKeys={["1"]}
                     className="ms-4"
                     items={[
-                        { key: "1", label: <b>Dashboard</b>, className: currentKey == "1" && "text-primary" },
+                        { key: "1", label: "Dashboard", className: currentKey == "1" && "text-primary" },
                         { key: "2", label: "Your Products", className: currentKey == "2" && "text-primary" },
                     ]}
                     selectedKeys={currentKey}
                     onSelect={(e) => setCurrentKey(e.key)}
                     selectable={true}
+                    style={{ minWidth: "220px" }}
                 />
             </div>
-            <Search
+            {currentKey != "3" && (<Search
                 placeholder="Search products..."
                 onChange={(e) => handleSearch(e.target.value)}
                 value={searchValue}
                 style={{ width: 300 }}
                 allowClear
-            />
+            />)}
             <div className="d-flex align-items-center">
                 <Avatar size="large" style={{ cursor: "pointer" }} icon={<UserOutlined />} onClick={() => navigate("/profile")} />
                 <Button className="ms-2" type="primary" danger onClick={handleLogout}>

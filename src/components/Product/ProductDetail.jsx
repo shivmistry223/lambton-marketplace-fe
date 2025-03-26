@@ -12,10 +12,11 @@ import {
     message,
 } from "antd";
 import { Container, Row, Col, Image } from "react-bootstrap";
-import { IMAGEDIR, PAYMENT, PRODUCT, STRIPE_PUBLIC_KEY } from "../../utils/constant";
+import { ADD_REVIEW, GET_REVIEW, IMAGEDIR, PAYMENT, PRODUCT, STRIPE_PUBLIC_KEY } from "../../utils/constant";
 import CustomHeader from "../Header/CustomHeader";
 import { getUserId } from "../../utils/helper";
 import { loadStripe } from "@stripe/stripe-js";
+import CustomFooter from "../CustomFooter/CustomFooter";
 
 const { TextArea } = Input;
 
@@ -47,7 +48,7 @@ const ProductDetail = () => {
 
     const fetchReviews = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/get-review/${productId}`, {
+            const response = await fetch(`${GET_REVIEW}/${productId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -84,11 +85,11 @@ const ProductDetail = () => {
         };
 
         try {
-            const response = await fetch("http://localhost:5000/add-review", {
+            const response = await fetch(ADD_REVIEW, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`, // Include auth token if required
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
                 body: JSON.stringify(newReview),
             });
@@ -102,6 +103,7 @@ const ProductDetail = () => {
 
             setReviewText("");
             setRating(0);
+            fetchReviews();
         } catch (error) {
             console.error("Error submitting review:", error);
             messageApi.open({
@@ -162,12 +164,16 @@ const ProductDetail = () => {
         }
     };
 
+    const redirectToDashboard = (id) => {
+        navigate("/dashboard")
+    }
+
     return (
         <Layout
             style={{ minHeight: "100vh", minWidth: "100vw", background: "#f8f9fa" }}
         >
             {contextHolder}
-            <CustomHeader />
+            <CustomHeader currentKey="3" setCurrentKey={redirectToDashboard} />
             <Container style={{ margin: "10px auto", width: "100%" }}>
                 <Row className="mt-4">
                     <Col md={7}>
@@ -241,7 +247,7 @@ const ProductDetail = () => {
                                 value={reviewText}
                                 onChange={(e) => setReviewText(e.target.value)}
                             />
-                            <Button type="primary" className="mt-2" onClick={handleAddReview}>
+                            <Button type="primary" className="mt-2" onClick={handleAddReview} disabled={!product?.isSold}>
                                 Submit Review
                             </Button>
                         </Card>
@@ -265,6 +271,7 @@ const ProductDetail = () => {
                     </Col>
                 </Row>
             </Container>
+            <CustomFooter />
         </Layout>
     );
 };

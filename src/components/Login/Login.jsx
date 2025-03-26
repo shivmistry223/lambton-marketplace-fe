@@ -33,7 +33,7 @@ export default function Login() {
         setError(data.message || "Invalid credentials");
       }
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      setError(err.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
