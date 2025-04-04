@@ -1,3 +1,4 @@
+import '@ant-design/v5-patch-for-react-19';
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Form, Button, Input, Select, Layout, Upload, message, Typography, Alert, Modal } from "antd";
@@ -81,15 +82,16 @@ const ProductForm = () => {
 
             setLoading(false);
 
+            const result = await response.json()
             if (response.ok) {
                 setModalMessage(id ? "Product updated successfully!" : "Product added successfully!");
                 setModalVisible(true);
             } else {
-                setMessageData({ type: "error", text: "Something went wrong." });
+                setMessageData({ type: "error", text: result.error || "Something went wrong." });
             }
         } catch (error) {
             setLoading(false);
-            setMessageData({ type: "error", text: "Something went wrong." });
+            setMessageData({ type: "error", text: error.message || "Something went wrong." });
         }
     };
 

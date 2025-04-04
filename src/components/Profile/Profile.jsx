@@ -49,10 +49,10 @@ const Profile = () => {
                     termNo: data.termNo,
                     phoneNumber: data.phoneNumber,
                 });
-                messageApi.open({
-                    type: "success",
-                    content: "Data Loaded Successfully!",
-                });
+                // messageApi.open({
+                //     type: "success",
+                //     content: "Data Loaded Successfully!",
+                // });
             } catch (error) {
                 messageApi.open({
                     type: "error",
@@ -232,7 +232,7 @@ const Profile = () => {
                     >
                         <Card
                             title="Student Information"
-                            bordered={false}
+                            variant={false}
                             style={{
                                 flex: 1,
                                 marginRight: "10px",
@@ -312,7 +312,7 @@ const Profile = () => {
 
                         <Card
                             title="Change Password"
-                            bordered={false}
+                            variant={false}
                             style={{
                                 flex: 1,
                                 minWidth: "350px",

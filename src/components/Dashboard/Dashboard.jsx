@@ -9,7 +9,7 @@ import {
 import { Container, Row, Col, Card, TabPane } from "react-bootstrap";
 import CustomHeader from "../Header/CustomHeader";
 import Product from "../Product/Product";
-import { PRODUCT, PRODUCT_TYPES, UPDATE_STATUS } from "../../utils/constant";
+import { ITEMS, PRODUCT, PRODUCT_TYPES, UPDATE_STATUS } from "../../utils/constant";
 import { getUserId } from "../../utils/helper";
 import CustomFooter from "../CustomFooter/CustomFooter";
 
@@ -101,6 +101,7 @@ const Dashboard = () => {
     };
 
     const handleMarkAsSold = async (id) => {
+
         const data = { orderId: id, isSold: true };
 
         try {
@@ -151,11 +152,8 @@ const Dashboard = () => {
                             defaultActiveKey="All"
                             onChange={handleTabChange}
                             size="large"
+                            items={ITEMS}
                         >
-                            <TabPane tab="All" key="all" />
-                            {PRODUCT_TYPES.map((type) => (
-                                <TabPane tab={type.label} key={type.value} />
-                            ))}
                         </Tabs>
                     </Card>
 

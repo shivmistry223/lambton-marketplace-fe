@@ -26,8 +26,9 @@ export const STRIPE_PUBLIC_KEY =
   "pk_test_51R2BVwGgfYH3pNgqo1NSrnhW7qmcqQI5stNRi2mELRLgg11zUXhlcCMqUIF0nCmePGXlJJEFDUFfujvwPMYdwV7n00pLW5deEl";
 
 export const ITEMS = [
-  { label: "Books", value: "books" },
-  { label: "Clothing", value: "clothing" },
-  { label: "Electronics", value: "electronic" },
-  { label: "Sports", value: "sport" },
+  { label: "All", key: "all" },
+  { label: "Books", key: "books" },
+  { label: "Clothing", key: "clothing" },
+  { label: "Electronics", key: "electronic" },
+  { label: "Sports", key: "sport" },
 ];
